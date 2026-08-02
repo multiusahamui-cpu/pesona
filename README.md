@@ -76,6 +76,35 @@ docs/adr/      keputusan arsitektur
 
 ---
 
+## Bundler dan test runner
+
+Berbeda per runtime — ini disengaja, bukan inkonsistensi. Tiap ekosistem dipakai dengan alat bakunya.
+
+| Target | Bundler | Test runner |
+|---|---|---|
+| `web-public` | Next.js (Turbopack/webpack) | Vitest |
+| `web-admin` · `web-ops` · `web-merchant` | **Vite** | Vitest |
+| `mobile-*` (3 app) | **Metro** — Vite tidak dipakai di mobile | **Jest** (`jest-expo`) + React Native Testing Library |
+| `services/*` | tsc / esbuild | Vitest |
+
+Memaksa Vitest ke React Native tidak berhasil: Metro punya resolusi modul sendiri dan sumber RN masih ber-anotasi Flow. `jest-expo` adalah jalur yang didukung resmi.
+
+```bash
+pnpm --filter @pesona/mobile-driver test
+pnpm --filter @pesona/core-api test
+pnpm test                                   # semua, lewat turbo
+```
+
+E2E mobile belum disiapkan. Untuk app driver — yang mengandalkan lokasi latar belakang — E2E di perangkat nyata (Maestro atau Detox) akan dibutuhkan sebelum rilis, karena unit test tidak dapat membuktikan perilaku saat layar terkunci.
+
+### Catatan: pnpm + React Native
+
+pnpm memakai symlink secara agresif dan Metro secara historis kurang ramah terhadapnya. `apps/mobile-*/metro.config.js` sudah mengaktifkan `unstable_enableSymlinks` dan menunjuk `watchFolders` ke root workspace. Jika tetap muncul galat resolusi modul saat build mobile, aktifkan `node-linker=hoisted` di `.npmrc` — barisnya sudah disiapkan sebagai komentar.
+
+Ketiga paket mobile sengaja **tidak** memakai `"type": "module"`, karena `metro.config.js` dan `babel.config.js` harus CommonJS.
+
+---
+
 ## Aturan yang tidak boleh dilanggar
 
 1. **Batas modul.** Modul di `core-api/src/modules/` hanya boleh saling mengimpor lewat `index.ts`. Menyentuh `repo/` atau `schema/` modul lain ditolak CI.
