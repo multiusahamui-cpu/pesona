@@ -1,0 +1,12 @@
+{
+  "name": "@pesona/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Konfigurasi bersama: eslint, tsconfig, tailwind preset, aturan batas modul.",
+  "devDependencies": {
+    "eslint": "^9.17.0",
+    "eslint-plugin-boundaries": "^5.0.1",
+    "typescript": "^5.7.2"
+  }
+}

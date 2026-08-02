@@ -1,0 +1,28 @@
+{
+  "name": "pesona-superapp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:core": "turbo run dev --filter=@pesona/core-api --filter=@pesona/dispatch --filter=@pesona/location --filter=@pesona/notification",
+    "dev:admin": "turbo run dev --filter=@pesona/web-admin --filter=@pesona/core-api",
+    "dev:ride": "turbo run dev --filter=@pesona/core-api --filter=@pesona/dispatch --filter=@pesona/location --filter=@pesona/mobile-driver",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "build:affected": "turbo run build --filter=...[origin/main]",
+    "infra:up": "docker compose -f infra/docker/compose.dev.yml up -d",
+    "infra:down": "docker compose -f infra/docker/compose.dev.yml down"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}

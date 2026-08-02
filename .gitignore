@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# environment — TIDAK PERNAH di-commit
+.env
+.env.*
+!.env.example
+
+# mobile
+.expo/
+android/build/
+android/.gradle/
+ios/Pods/
+*.keystore
+*.jks
+
+# artefak & data — jangan pernah masuk repo (pelajaran dari garuda-superapp)
+*.zip
+*.tar.gz
+*.7z
+repo/
+backups/
+.backup_sys/
+*.csv
+!docs/**/*.csv
+
+# tooling
+coverage/
+.vscode/
+.idea/
+.DS_Store
+*.log

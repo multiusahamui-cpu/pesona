@@ -1,0 +1,24 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["NODE_ENV"],
+  "globalDependencies": ["tsconfig.base.json", ".nvmrc"],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["DATABASE_URL", "REDIS_URL", "PORT", "SESSION_SECRET"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "env": ["NODE_ENV", "DATABASE_URL", "REDIS_URL"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "env": ["DATABASE_URL", "REDIS_URL"]
+    },
+    "lint": { "dependsOn": ["^build"] },
+    "typecheck": { "dependsOn": ["^build"] }
+  }
+}

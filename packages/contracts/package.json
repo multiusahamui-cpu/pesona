@@ -1,0 +1,22 @@
+{
+  "name": "@pesona/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sumber kebenaran tipe: skema zod, lalu OpenAPI di-generate darinya (ADR: zod-first).",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "gen:openapi": "tsx scripts/gen-openapi.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "zod-to-json-schema": "^3.24.1"
+  }
+}

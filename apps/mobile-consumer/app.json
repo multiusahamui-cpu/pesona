@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Pesona",
+    "slug": "pesona-consumer",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "scheme": "pesonaconsumer",
+    "android": {
+      "package": "id.co.GANTI-BADANHUKUM.pesona.consumer"
+    },
+    "ios": {
+      "bundleIdentifier": "id.co.GANTI-BADANHUKUM.pesona.consumer"
+    }
+  }
+}

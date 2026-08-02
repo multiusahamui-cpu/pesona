@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Pesona Driver",
+    "slug": "pesona-driver",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "scheme": "pesonadriver",
+    "android": {
+      "package": "id.co.GANTI-BADANHUKUM.pesona.driver"
+    },
+    "ios": {
+      "bundleIdentifier": "id.co.GANTI-BADANHUKUM.pesona.driver"
+    }
+  }
+}

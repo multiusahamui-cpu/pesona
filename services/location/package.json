@@ -1,0 +1,27 @@
+{
+  "name": "@pesona/location",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Modul 4 — presence & ingest GPS. Diekstrak karena profil tulis 100k+/detik dan datastore berbeda.",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pesona/contracts": "workspace:*",
+    "express": "^4.21.2",
+    "ioredis": "^5.4.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
