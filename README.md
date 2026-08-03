@@ -16,10 +16,35 @@ Arsitektur lengkap dan seluruh ADR: [`docs/adr/ARSITEKTUR-PESONA-SUPERAPP.md`](d
 
 ```bash
 corepack enable
-pnpm install
+pnpm install:backend      # services/* + packages/* — mulai dari sini
 cp .env.example .env      # lalu isi
 pnpm infra:up             # Postgres + Redis lokal
 ```
+
+### Instalasi bertahap
+
+Instalasi sekaligus untuk 17 proyek mengunduh sekitar 1,5–2 GB pada mesin yang store pnpm-nya masih kosong. Pada koneksi yang tidak stabil itu rawan `ECONNRESET`. Pasang bertahap sesuai kebutuhan kerja:
+
+```bash
+pnpm install:backend    # services/* + packages/*  — cukup untuk Fase 0
+pnpm install:web        # apps/web-*
+pnpm install:mobile     # apps/mobile-*  — paling berat (React Native ~24 MB)
+pnpm install:all        # semuanya sekaligus
+```
+
+Setiap tahap menambah ke store yang sama, jadi tidak ada pekerjaan terbuang. Mengulang tahap yang gagal akan memakai kembali paket yang sudah terunduh (`reused`, bukan `downloaded`).
+
+### Kalau instalasi macet
+
+`.npmrc` sudah menurunkan `network-concurrency` ke 4 dan menaikkan batas waktu. Jika masih bermasalah:
+
+```bash
+pnpm store status                 # cek kesehatan store
+pnpm install --prefer-offline     # pakai yang sudah ada di store dulu
+pnpm install --network-concurrency=1   # paling lambat, paling tahan
+```
+
+Pada Windows, tambahkan folder proyek dan store pnpm (`pnpm store path`) ke pengecualian Microsoft Defender — pemindaian real-time pada ribuan berkas kecil dapat membuat instalasi tampak menggantung.
 
 ---
 

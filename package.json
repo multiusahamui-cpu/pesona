@@ -9,6 +9,10 @@
     "pnpm": ">=9"
   },
   "scripts": {
+    "install:backend": "pnpm install --filter \"./services/*\" --filter \"./packages/*\"",
+    "install:web": "pnpm install --filter \"./apps/web-*\"",
+    "install:mobile": "pnpm install --filter \"./apps/mobile-*\"",
+    "install:all": "pnpm install",
     "dev": "turbo run dev",
     "dev:core": "turbo run dev --filter=@pesona/core-api --filter=@pesona/dispatch --filter=@pesona/location --filter=@pesona/notification",
     "dev:admin": "turbo run dev --filter=@pesona/web-admin --filter=@pesona/core-api",
