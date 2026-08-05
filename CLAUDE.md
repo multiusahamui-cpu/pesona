@@ -2,8 +2,15 @@
 
 Konteks untuk Claude sebelum bekerja di repo ini. Baca ini duluan setiap
 memulai sesi baru — jangan percaya status di README.md/ADR begitu saja
-tanpa mengecek `git log --oneline -15` dan task list dulu, keduanya bisa
-lebih baru daripada dokumen ini.
+tanpa mengecek riwayat commit (minta Ulpermadi tempel `git log --oneline
+-15`, lihat §Keterbatasan sandbox di bawah untuk alasannya) dan task
+list dulu, keduanya bisa lebih baru daripada dokumen ini.
+
+Setelah itu baca **`docs/JURNAL-KERJA.md`** (beberapa entri terakhir
+saja) — itu catatan naratif kronologis kenapa keadaan sekarang begini,
+termasuk insiden dan keputusan yang tidak masuk ke ringkasan evergreen
+di bawah. Dokumen ini (CLAUDE.md) jawab "apa aturannya sekarang", jurnal
+itu jawab "kenapa".
 
 ## Apa proyek ini
 
