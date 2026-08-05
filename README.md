@@ -143,6 +143,24 @@ Ketiga paket mobile sengaja **tidak** memakai `"type": "module"`, karena `metro.
 
 ## Status
 
-Fase 0 — scaffold. Belum ada kode dari garuda yang dipindahkan.
+**Fase 0 selesai.** Belum ada kode dari garuda yang dipindahkan.
 
-Langkah berikutnya: `packages/contracts` (zod-first) dan `packages/config` (aturan batas modul), lalu kontrak modul Dispatch.
+| Komponen | Status |
+|---|---|
+| Struktur monorepo, 16 paket | Selesai |
+| 11 modul domain di `core-api` (termasuk modul 13 Escrow & Settlement, modul 14 Communication) | Kerangka siap |
+| `packages/config` — ESLint + aturan batas modul | Selesai |
+| `packages/contracts` — fondasi zod, tipe Money, state machine Order, kontrak Escrow | Selesai |
+| CI GitHub Actions — typecheck, lint, test, penjaga repositori | Selesai |
+| Dockerfile 4 service | Selesai |
+
+Langkah berikutnya (Fase 1): kontrak modul **Dispatch** — state machine dispatch, API driver-side accept/reject/timeout/reassign, dan titik sambungnya ke Escrow.
+
+### Perintah verifikasi
+
+```bash
+pnpm install
+pnpm --filter @pesona/contracts test        # termasuk uji aritmetika JRN-P01/P02
+pnpm --filter @pesona/core-api lint         # gerbang batas modul
+pnpm --filter @pesona/contracts gen:openapi
+```

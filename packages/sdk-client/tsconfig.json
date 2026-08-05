@@ -1,10 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    // sdk-client berjalan di browser DAN React Native, jadi butuh tipe
+    // web standar: fetch, URL, AbortController, crypto, window, navigator.
+    // tsconfig.base.json sengaja hanya memuat ES2023 karena itu yang
+    // benar untuk service di sisi Node.
+    "lib": ["ES2023", "DOM"],
     "outDir": "dist",
     "rootDir": "src"
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

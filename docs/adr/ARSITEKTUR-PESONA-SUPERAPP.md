@@ -290,6 +290,12 @@ pesona/
 | 10 | Payout Mitra | `core-api` | Parsial | 1–2 |
 | 11 | Catalog & Merchant Ops | `core-api` | Ada | 2 |
 | 12 | Trust & Safety | `core-api` | **Belum ada** | 2 |
+| 13 | **Escrow & Settlement** | `core-api` | **Belum ada** | **1** |
+| 14 | Communication (chat & voice) | `core-api` | Belum ada | 2 |
+
+> **Modul 13 ditambahkan 3 Agustus 2026.** Rinciannya — struktur tiga rekening, bagan jurnal JRN-P01–P09, invariant rekonsiliasi, jalur refund, dan disiplin batch EOD — ada di dokumen terpisah: [`ARSITEKTUR-KEUANGAN-PESONA.md`](ARSITEKTUR-KEUANGAN-PESONA.md).
+>
+> Dokumen itu juga memuat perubahan penting pada §6 di bawah: **model peran berubah dari berjenjang (seperti Garuda) menjadi sejajar.** Konsumen dapat memakai layanan tanpa menjadi anggota; driver dan merchant wajib anggota sebelum pencairan pertama. Modul 1 (Identity) dan modul 2 (Partner Lifecycle) terpengaruh secara struktural.
 
 Empat modul belum ada sama sekali atau baru sebagian: **2, 5, 12, dan sebagian 10**. Salah satunya — Dispatch — adalah jantung yang membedakan ride-hailing dari sekadar pencatatan perjalanan.
 

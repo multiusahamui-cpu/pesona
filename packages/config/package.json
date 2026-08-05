@@ -6,7 +6,19 @@
   "description": "Konfigurasi bersama: eslint, tsconfig, tailwind preset, aturan batas modul.",
   "devDependencies": {
     "eslint": "^9.17.0",
-    "eslint-plugin-boundaries": "^5.0.1",
     "typescript": "^5.7.2"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./eslint-base": "./src/eslint.base.js",
+    "./eslint-boundaries": "./src/eslint.boundaries.js",
+    "./tsconfig-service": "./src/tsconfig.service.json",
+    "./tsconfig-react": "./src/tsconfig.react.json"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint-plugin-boundaries": "^5.0.1",
+    "typescript-eslint": "^8.18.1"
   }
 }

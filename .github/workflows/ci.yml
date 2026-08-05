@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  quality:
+    name: Typecheck, lint, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Turbo affected-only membandingkan dengan origin/main,
+          # jadi riwayat penuh dibutuhkan.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm turbo run typecheck --filter=...[origin/main]
+
+      # Gerbang batas modul. Kalau satu modul core-api menyentuh repo/
+      # atau schema/ modul lain, langkah ini gagal dan PR tidak bisa
+      # digabung. Lihat ADR-001.
+      - name: Lint (termasuk gerbang batas modul)
+        run: pnpm turbo run lint --filter=...[origin/main]
+
+      - name: Test
+        run: pnpm turbo run test --filter=...[origin/main]
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run build --filter=...[origin/main]
+
+  guard:
+    name: Penjaga repositori
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pelajaran langsung dari garuda: ~200 MB artefak zip menempel
+      # permanen di riwayat git dan tidak bisa dibersihkan tanpa
+      # menulis ulang seluruh riwayat.
+      - name: Tolak artefak biner dan berkas rahasia
+        run: |
+          set -e
+          BAD=$(git ls-files | grep -E '\.(zip|7z|tar\.gz|keystore|jks)$|^backups/|^repo/' || true)
+          if [ -n "$BAD" ]; then
+            echo "Artefak terlarang ter-track:"
+            echo "$BAD"
+            exit 1
+          fi
+          ENV=$(git ls-files | grep -E '(^|/)\.env$|(^|/)\.env\.[^e]' || true)
+          if [ -n "$ENV" ]; then
+            echo "Berkas .env ter-track:"
+            echo "$ENV"
+            exit 1
+          fi
+          echo "Bersih."
+
+      # Bundle ID mobile permanen setelah rilis store. Placeholder harus
+      # sudah diganti sebelum tag rilis dibuat.
+      - name: Ingatkan bundle ID belum final
+        run: |
+          if git ls-files | xargs grep -l "GANTI-BADANHUKUM" 2>/dev/null | grep -q "app.json"; then
+            echo "::warning::Bundle ID mobile masih placeholder. Wajib diganti sebelum rilis store pertama."
+          fi
