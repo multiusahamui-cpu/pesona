@@ -1,7 +1,10 @@
 # Arsitektur Pesona SuperApp
 
-**Status:** Draf untuk persetujuan
-**Tanggal:** 2 Agustus 2026
+**Status:** Disetujui, sedang diimplementasikan (Fase 1). Dokumen ini
+adalah catatan keputusan arsitektur — untuk status implementasi
+per-modul yang lebih baru, lihat `README.md` §Status dan `CLAUDE.md` di
+root repo, bukan dokumen ini.
+**Tanggal:** 2 Agustus 2026 (lihat §Riwayat perubahan di akhir dokumen untuk pembaruan)
 **Penyusun:** Ulpermadi Ibrahim (arsitek/lead dev)
 **Sumber regresi:** `garuda-superapp`
 **Sasaran:** superapp multi-vertikal berbasis koperasi dengan inti operasi gaya ride-hailing, skala target 10 juta pengguna terdaftar
@@ -439,7 +442,7 @@ Urutan yang ditegaskan: **cabut modul 3, 4, 6, 9 menjadi modul berdiri sendiri �
 
 ## 12. Yang belum diputuskan
 
-1. **Bahasa `dispatch`.** Node/TS untuk konsistensi tim, atau Go untuk konkurensi. Rekomendasi: mulai dengan Node/TS dan jaga batas modulnya cukup bersih agar dapat ditulis ulang tanpa menyentuh pemanggilnya.
+1. ~~**Bahasa `dispatch`.**~~ **Diputuskan dan dibangun: Node/TS.** Modul 5 (Dispatch & Matching) sudah selesai dengan pola port/adapter (`SupplyPort`/`OrderPort`) yang menjaga batasnya cukup bersih untuk ditulis ulang ke bahasa lain nanti tanpa menyentuh pemanggilnya, kalau kebutuhan konkurensi ternyata memaksa.
 2. **Penyedia infrastruktur.** Hostinger VPS saat ini memadai untuk Fase 0–1, tetapi tidak untuk 10 juta pengguna. Keputusan cloud perlu diambil sebelum Fase 4.
 3. **Event backbone.** Kafka atau NATS untuk komunikasi antar layanan. Belum dibutuhkan sampai Fase 2; HTTP internal cukup untuk sekarang.
 4. **Nasib garuda-superapp.** Dibekukan setelah Fase 3, atau tetap jalan sebagai sistem koperasi terpisah.
@@ -461,3 +464,12 @@ Diambil dari pembacaan repositori pada 2 Agustus 2026.
 | Mobile | Satu binary Expo, grup `(auth)`, `(kyc)`, `(member)`, `(mitra)` |
 | Endpoint ride-hailing | 11 rute, 23 handler — tanpa accept/reject driver |
 | Deployment saat ini | Satu proses PM2, `dist/server.mjs`, port 5000 |
+
+---
+
+## Riwayat perubahan
+
+| Tanggal | Perubahan |
+|---|---|
+| 2 Agustus 2026 | Draf pertama, disetujui. |
+| 5 Agustus 2026 | Fase 1 sebagian besar selesai dan teruji: modul 4 (Supply State), 5 (Dispatch & Matching, termasuk scheduler `sweepExpired`), 6 (Order Lifecycle), 9 (Notification & Realtime), 13 (Escrow & Settlement, JRN-P01–P04, persistensi Postgres via Drizzle terverifikasi). Bahasa `dispatch` (§12) diputuskan: Node/TS. Status detail per-modul dipindah ke `README.md`/`CLAUDE.md` supaya tidak dobel-catat di sini. |

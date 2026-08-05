@@ -143,18 +143,30 @@ Ketiga paket mobile sengaja **tidak** memakai `"type": "module"`, karena `metro.
 
 ## Status
 
-**Fase 0 selesai.** Belum ada kode dari garuda yang dipindahkan.
+**Fase 1 — alur inti ride-hailing berjalan end-to-end dan teruji.** Detail
+lengkap: `CLAUDE.md` (konteks kerja) dan riwayat commit di `main`.
 
-| Komponen | Status |
+| Modul / komponen | Status |
 |---|---|
-| Struktur monorepo, 16 paket | Selesai |
-| 11 modul domain di `core-api` (termasuk modul 13 Escrow & Settlement, modul 14 Communication) | Kerangka siap |
-| `packages/config` — ESLint + aturan batas modul | Selesai |
-| `packages/contracts` — fondasi zod, tipe Money, state machine Order, kontrak Escrow | Selesai |
-| CI GitHub Actions — typecheck, lint, test, penjaga repositori | Selesai |
-| Dockerfile 4 service | Selesai |
+| Struktur monorepo, `packages/config`, `packages/contracts`, CI, Dockerfile | Selesai (Fase 0) |
+| **5 — Dispatch & Matching** | Selesai: gelombang tawaran, terima/tolak/hangus, scheduler `sweepExpired` (interval + graceful shutdown) |
+| **4 — Supply State** (`location`) | Selesai: validasi GPS, presence, indeks kandidat |
+| **6 — Order Lifecycle** | Selesai: state machine, idempotensi webhook, tersambung ke dispatch (`DispatchPort`) dan notification (`NotificationPort`) lewat `OrderFlow` |
+| **13 — Escrow & Settlement** | Selesai untuk JRN-P01–P04 (bayar, selesai, refund penuh, refund sebagian). `Ledger` interface async penuh, `InMemoryLedger` + `DrizzleLedger`, diverifikasi ke Postgres nyata |
+| **9 — Notification & Realtime** | Selesai: inbox + registrasi perangkat, `PushPort`/`NoopPushAdapter` (belum ke FCM/APNS sungguhan), urutan kotak-masuk-dulu-baru-push ditegakkan struktural |
+| Persistensi Postgres (Drizzle) | Selesai: skema `orders`/`journal_entries`/`journal_lines`, migration + integration test ke DB nyata |
+| **1 — Identity & Membership** | Belum — kerangka kosong |
+| **2 — Partner Lifecycle** | Belum — kerangka kosong. Prioritas berikut, `partnerId` di order saat ini tidak diverifikasi |
+| **3 — Geo & Maps** | Belum — kerangka kosong |
+| **7 — Pricing & Promo** | Belum — MDR (7‰) dan bagian mitra (850‰) masih hardcode di `OrderService` |
+| **8 — Payments & Wallet** | Belum — belum ada integrasi akuisitor sungguhan (Xendit/Duitku); webhook pembayaran saat ini dipicu manual/tes |
+| **10 — Payout Mitra** | Belum — klaster GL-journal garuda (standing-order, BOM batch-pay) belum dipindah |
+| **11 — Catalog**, **12 — Trust & Safety**, **14 — Communication** | Belum (Fase 2) |
+| Redis adapter (dispatch GEOSEARCH, location presence) | Belum — keduanya masih in-memory |
 
-Langkah berikutnya (Fase 1): kontrak modul **Dispatch** — state machine dispatch, API driver-side accept/reject/timeout/reassign, dan titik sambungnya ke Escrow.
+Urutan yang direkomendasikan untuk lanjutan Fase 1: **Identity → Partner
+Lifecycle → Payment**, karena Partner dan Payment sama-sama butuh fondasi
+autentikasi dari Identity lebih dulu.
 
 ### Perintah verifikasi
 
@@ -163,4 +175,14 @@ pnpm install
 pnpm --filter @pesona/contracts test        # termasuk uji aritmetika JRN-P01/P02
 pnpm --filter @pesona/core-api lint         # gerbang batas modul
 pnpm --filter @pesona/contracts gen:openapi
+
+# Test per layanan (semua lolos per commit terakhir)
+pnpm --filter @pesona/core-api test
+pnpm --filter @pesona/dispatch test
+pnpm --filter @pesona/location test
+pnpm --filter @pesona/notification test
+
+# Migration DB (butuh DATABASE_URL di .env — lihat CLAUDE.md untuk peringatan keamanannya)
+pnpm --filter @pesona/core-api db:generate
+pnpm --filter @pesona/core-api db:migrate
 ```

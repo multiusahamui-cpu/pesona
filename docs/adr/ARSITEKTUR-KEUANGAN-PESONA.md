@@ -449,3 +449,4 @@ Jawaban atas nomor 1 dan 2 menentukan arah, dan bisa didapat dalam hitungan hari
 | Tanggal | Perubahan |
 |---|---|
 | 3 Agustus 2026 | Draf pertama. Menuangkan pembahasan 2–3 Agustus: model peran sejajar, tiga rekening, alur dua fase, bagan jurnal JRN-P01–P09, invariant rekonsiliasi, jalur refund, disiplin batch, modul 13 |
+| 5 Agustus 2026 | JRN-P01 (bayar), JRN-P02 (selesai), JRN-P03 (batal penuh), JRN-P04 (batal sebagian) diimplementasikan di `services/core-api/src/modules/escrow-settlement/` dan diverifikasi ke Postgres nyata (bukan cuma in-memory). `Ledger` sengaja dibuat interface async penuh (bukan `void \| Promise<void>`) supaya implementasi Postgres tidak bisa diam-diam lupa `await` dan kehilangan tulisan jurnal. JRN-P05–P09 (penyapuan komisi, EOD, simpanan) belum dikerjakan — menunggu modul Payout dan Identity. |
